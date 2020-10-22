@@ -75,8 +75,13 @@ WSGI_APPLICATION = 'src.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',  # 'django.db.backends.sqlite3',
+        'NAME': 'soul',  # BASE_DIR / 'db.sqlite3',
+        'HOST': 'mariadb',
+        'PORT': '3306',
+        'USER': 'root',
+        'PASSWORD': '1214',
+        'default-character-set': 'utf8'
     }
 }
 

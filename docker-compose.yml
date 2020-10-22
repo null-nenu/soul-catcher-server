@@ -11,7 +11,7 @@ services:
         image: mariadb
         environment:
             MYSQL_ROOT_PASSWORD: 1214
-            MYSQL_DATABASE: traffic
+            MYSQL_DATABASE: soul
         volumes:
             - ./mariadb:/var/lib/mysql
         ports:
