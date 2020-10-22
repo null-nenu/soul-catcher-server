@@ -1,0 +1,38 @@
+version: "3"
+
+networks:
+    default:
+        driver: bridge
+        driver_opts:
+            com.docker.network.driver.mtu: 1492
+
+services:
+    db:
+        image: mariadb
+        environment:
+            MYSQL_ROOT_PASSWORD: 1214
+            MYSQL_DATABASE: traffic
+        volumes:
+            - ./db:/var/lib/mysql
+        ports:
+            - "3306:3306"
+    web:
+        build: .
+        command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+        volumes:
+            - ./src:/code/src
+            - ./manage.py:/code/manage.py
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db
+    nginx:
+        image: nginx
+        volumes:
+            - nginx:/etc/nginx
+        depends_on: 
+            - web
+        ports: 
+            - "80:80"
+            - "443:443"
+    
