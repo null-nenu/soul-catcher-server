@@ -4,8 +4,8 @@ from django.db import models
 
 
 class BackgroundMusic(models.Model):
-    file = models.FileField(null=True)
+    file = models.FileField(upload_to="musics", null=True)
 
 
 class BackgroundImage(models.Model):
-    file = models.ImageField(null=True)
+    file = models.ImageField(upload_to="images", null=True)

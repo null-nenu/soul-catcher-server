@@ -22,6 +22,7 @@ services:
         volumes:
             - ./src:/code/src
             - ./manage.py:/code/manage.py
+            - ./static:/var/static
         ports:
             - "8000:8000"
         depends_on:
@@ -32,6 +33,7 @@ services:
         image: nginx
         volumes:
             - ./nginx:/etc/nginx
+            - ./static:/var/static
         depends_on: 
             - django
         ports: 
