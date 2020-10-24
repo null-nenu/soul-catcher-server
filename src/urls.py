@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from src.api.wechat import views as wechatview
+from src.api.wechat import views as wechat_view
+from src.api.scale import views as evaluation_view
 
 # router of Django REST Framework
 router = routers.DefaultRouter()
-router.register(r'wechat', wechatview.WechatViewSet, basename="wechat")
+router.register(r'wechat', wechat_view.WechatViewSet, basename="wechat")
+router.register(r'evaluation', evaluation_view.EvaluationViewSet)
 
 urlpatterns = [
     path('', include(router.urls)), # add Django REST Framework's URL to Django
