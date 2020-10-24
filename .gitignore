@@ -6,4 +6,4 @@
 
 mariadb
 
-src/setting.py
+src/settings.py

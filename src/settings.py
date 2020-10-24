@@ -86,7 +86,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 'django.db.backends.sqlite3',
         'NAME': 'soul',  # BASE_DIR / 'db.sqlite3',
-        'HOST': 'localhost',
+        'HOST': 'mariadb',
         'PORT': '3306',
         'USER': 'root',
         'PASSWORD': '1214',
