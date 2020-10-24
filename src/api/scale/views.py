@@ -44,7 +44,11 @@ class EvaluationViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False)
     def score(self,request,pk=None):
         requestdata=request.data
-        return Response({'id':1})
+        scoreSum=0
+        optionqueryset=Option.objects.filter(question_id__in=requestdata['options'])
+        optiondata=QuestionSerializer(optionqueryset,many=True).data
+        print(optiondata)
+        return Response(optiondata)
 
 class EvaluationRateViewSet(viewsets.ModelViewSet):
     queryset = EvaluationRate.objects.all()
@@ -65,6 +69,10 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
     queryset = EvaluationRecord.objects.all()
     serializer_class = EvaluationRecordSerializer
 
+    @action(methods=['get'], detail=True)
+    def details(self,request,pk=None):
+        evaratequeryset=EvaluationRate.objects.get(id='1')
+        return Response(EvaluationRateSerializer(evaratequeryset,many=False).data)
 
 class EvaluationDetailViewSet(viewsets.ModelViewSet):
     queryset = EvaluationDetail.objects.all()
