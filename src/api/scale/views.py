@@ -39,9 +39,12 @@ class EvaluationViewSet(viewsets.ModelViewSet):
             temp['options'] = option.data
         res = dict(evaluation.data)
         res['questions'] = questiondata
-
         return Response(res)
 
+    @action(methods=['post'], detail=False)
+    def score(self,request,pk=None):
+        requestdata=request.data
+        return Response({'id':1})
 
 class EvaluationRateViewSet(viewsets.ModelViewSet):
     queryset = EvaluationRate.objects.all()
