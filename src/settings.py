@@ -40,7 +40,12 @@ INSTALLED_APPS = [
     # Django REST Framework
     'rest_framework',
     # Django REST Framework AuthToken
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'src.api.scale',
+    'src.api.setting',
+    'src.api.story',
+    'src.api.user',
+    'src.api.wechat'
 ]
 
 MIDDLEWARE = [

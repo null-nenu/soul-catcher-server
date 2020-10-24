@@ -18,7 +18,7 @@ services:
             - "3306:3306"
     django:
         build: .
-        command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+        command: bash -c "python3 manage.py makemigrations scale setting story user wechat && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
         volumes:
             - ./src:/code/src
             - ./manage.py:/code/manage.py
@@ -26,6 +26,8 @@ services:
             - "8000:8000"
         depends_on:
             - mariadb
+        restart: always
+
     nginx:
         image: nginx
         volumes:
