@@ -32,6 +32,7 @@ router.register(r'evaluation_detail', evaluation_view.EvaluationDetailViewSet)
 router.register(r'setting', setting_view.SettingViewSet, basename="setting")
 router.register(r'background_music', setting_view.BackgroundMusicViewSet)
 router.register(r'background_image', setting_view.BackgroundImageViewSet)
+router.register(r'solgan', setting_view.SloganViewSet)
 
 urlpatterns = [
     # add Django REST Framework's URL to Django
