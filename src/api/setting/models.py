@@ -9,3 +9,7 @@ class BackgroundMusic(models.Model):
 
 class BackgroundImage(models.Model):
     file = models.ImageField(upload_to="images", null=True)
+
+
+class Slogan(models.Model):
+    text = models.CharField(max_length=255)
