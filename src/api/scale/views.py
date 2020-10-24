@@ -1,5 +1,9 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 from .models import Evaluation
 from .models import EvaluationRate
 from .models import Question
@@ -19,6 +23,37 @@ from .serializers import EvaluationDetailSerializer
 class EvaluationViewSet(viewsets.ModelViewSet):
     queryset = Evaluation.objects.all()
     serializer_class = EvaluationSerializer
+
+    @action(methods=['get'], detail=True)
+    def details(self, request, pk=None):
+        if pk == None:
+            return Response(status=404)
+        evaqueryset = Evaluation.objects.get(id=pk)
+        evaluation = EvaluationSerializer(evaqueryset, many=False)
+        quesqueryset = Question.objects.filter(evaluation_id=pk)
+        question = QuestionSerializer(quesqueryset, many=True)
+        questiondata = question.data
+        for temp in questiondata:
+            optionQuerySet = Option.objects.filter(question_id=temp['id'])
+            option = OptionSerializer(optionQuerySet, many=True)
+            temp['options'] = option.data
+        res = dict(evaluation.data)
+        res['questions'] = questiondata
+        return Response(res)
+
+    @action(methods=['post'], detail=True)
+    def score(self, request, pk=None):
+        request_data = request.data
+        scoreSum = 0
+        optionQuerySet = Option.objects.filter(pk__in=request_data['options'])
+        optiondata = OptionSerializer(optionQuerySet, many=True).data
+        for temp in optiondata:
+            scoreSum = scoreSum + temp['score']
+
+        evaluationRecord = EvaluationRecord(user=None, evaluation=request_data['evaluation'], score=scoreSum)
+        evaluationRecord.save()
+
+        return Response(optiondata)
 
 
 class EvaluationRateViewSet(viewsets.ModelViewSet):

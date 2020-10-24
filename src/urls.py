@@ -29,6 +29,7 @@ router.register(r'option', evaluation_view.OptionViewSet)
 router.register(r'evaluation_record', evaluation_view.EvaluationRecordViewSet)
 router.register(r'evaluation_detail', evaluation_view.EvaluationDetailViewSet)
 
+
 urlpatterns = [
     path('', include(router.urls)),     # add Django REST Framework's URL to Django
     path('admin/', admin.site.urls),
