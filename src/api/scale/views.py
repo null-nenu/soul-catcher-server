@@ -28,17 +28,17 @@ class EvaluationViewSet(viewsets.ModelViewSet):
     def details(self, request, pk=None):
         if pk == None:
             return Response(status=404)
-        evaQuerySet = Evaluation.objects.get(id=pk)
-        evaluation = EvaluationSerializer(evaQuerySet, many=False)
-        quesQuerySet = Question.objects.filter(evaluation_id=pk)
-        question = QuestionSerializer(quesQuerySet, many=True)
-        questionData = question.data
-        for temp in questionData:
+        evaqueryset = Evaluation.objects.get(id=pk)
+        evaluation = EvaluationSerializer(evaqueryset, many=False)
+        quesqueryset = Question.objects.filter(evaluation_id=pk)
+        question = QuestionSerializer(quesqueryset, many=True)
+        questiondata = question.data
+        for temp in questiondata:
             optionQuerySet = Option.objects.filter(question_id=temp['id'])
             option = OptionSerializer(optionQuerySet, many=True)
             temp['options'] = option.data
         res = dict(evaluation.data)
-        res['questions'] = questionData
+        res['questions'] = questiondata
         return Response(res)
 
 
