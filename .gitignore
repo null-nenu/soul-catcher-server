@@ -7,3 +7,5 @@
 mariadb
 
 src/settings.py
+
+static
