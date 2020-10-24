@@ -43,12 +43,18 @@ class EvaluationViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=False)
     def score(self,request,pk=None):
-        requestdata=request.data
-        scoreSum=0
-        optionqueryset=Option.objects.filter(question_id__in=requestdata['options'])
-        optiondata=QuestionSerializer(optionqueryset,many=True).data
-        print(optiondata)
-        return Response(optiondata)
+        # requestdata=request.data
+        # scoreSum=0
+        # optionqueryset=Option.objects.filter(pk__in=requestdata['options'])
+        # optiondata=OptionSerializer(optionqueryset,many=True).data
+        # for temp in optiondata:
+        #     scoreSum+=temp['score']
+        # #user 临时为none
+        # evaluationRecord=EvaluationRecord(user=None,score=scoreSum)
+        # evaluationRecord.
+        # evaluationRecord.save()
+        # return Response(optiondata)
+        return Response({"id":1})
 
 class EvaluationRateViewSet(viewsets.ModelViewSet):
     queryset = EvaluationRate.objects.all()
