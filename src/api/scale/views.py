@@ -39,6 +39,7 @@ class EvaluationViewSet(viewsets.ModelViewSet):
             temp['options'] = option.data
         res = dict(evaluation.data)
         res['questions'] = questiondata
+
         return Response(res)
 
 
