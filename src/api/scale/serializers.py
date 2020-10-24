@@ -8,27 +8,27 @@ class EvaluationSerializer(serializers.ModelSerializer):
         model = Evaluation
         fields = "__all__"
 
-class EvaluationRateSerializer(serializers.Serializer):
+class EvaluationRateSerializer(serializers.ModelSerializer):
     class Meta:
         model = EvaluationRate
         fields = "__all__"
 
-class QuestionSerializer(serializers.Serializer):
+class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = "__all__"
 
-class OptionSerializer(serializers.Serializer):
+class OptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Option
         fields = "__all__"
 
-class EvaluationRecordSerializer(serializers.Serializer):
+class EvaluationRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = EvaluationRecord
         fields = "__all__"
 
-class EvaluationDetailSerializer(serializers.Serializer):
+class EvaluationDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = EvaluationDetail
         fields = "__all__"

@@ -23,8 +23,14 @@ from src.api.scale import views as evaluation_view
 router = routers.DefaultRouter()
 router.register(r'wechat', wechat_view.WechatViewSet, basename="wechat")
 router.register(r'evaluation', evaluation_view.EvaluationViewSet)
+router.register(r'evaluation_rate', evaluation_view.EvaluationRateViewSet)
+router.register(r'question', evaluation_view.QuestionViewSet)
+router.register(r'option', evaluation_view.OptionViewSet)
+router.register(r'evaluation_record', evaluation_view.EvaluationRecordViewSet)
+router.register(r'evaluation_detail', evaluation_view.EvaluationDetailViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)), # add Django REST Framework's URL to Django
+    path('', include(router.urls)),     # add Django REST Framework's URL to Django
     path('admin/', admin.site.urls),
 ]
+
