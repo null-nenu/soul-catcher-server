@@ -55,12 +55,22 @@ class EvaluationViewSet(viewsets.ModelViewSet):
             scoresum += temp['score']
         # user 临时为none
         user = None
-        ftime=datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[0:-3]
+        ftime = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[0:-3]
         evaluationrecord = EvaluationRecord(user=user, score=scoresum, timestamp=ftime)
         evaluationrecord.evaluation = Evaluation.objects.get(id=requestdata['evaluation'])
         evaluationrecord.save()
         recqueryset = EvaluationRecord.objects.filter(user=user, evaluation=requestdata['evaluation'], timestamp=ftime)
-        savaid = {'id': EvaluationRecordSerializer(recqueryset, many=True).data[0]['id']}
+        rec_id = EvaluationRecordSerializer(recqueryset, many=True).data[0]['id']
+        savaid = {'id': rec_id}
+
+        data = zip(requestdata['question'], requestdata['options'])
+        for i, j in data:
+            detail_data = EvaluationDetail()
+            detail_data.option = Option.objects.get(id=j)
+            detail_data.evaluation = evaluationrecord
+            detail_data.question = Question.objects.get(id=i)
+            detail_data.save()
+
         return Response(savaid)
 
 
