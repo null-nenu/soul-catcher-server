@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+import datetime
 
 from .models import Evaluation
 from .models import EvaluationRate
@@ -18,6 +19,7 @@ from .serializers import QuestionSerializer
 from .serializers import OptionSerializer
 from .serializers import EvaluationRecordSerializer
 from .serializers import EvaluationDetailSerializer
+from src.api.user.serializers import UserSerializer
 
 from datetime import datetime
 
@@ -70,7 +72,8 @@ class EvaluationViewSet(viewsets.ModelViewSet):
             detail_data = EvaluationDetail()
             detail_data.option = Option.objects.get(id=j)
             detail_data.evaluation = evaluationrecord
-            detail_data.question = Question.objects.get(id=OptionSerializer(detail_data.option).data.get("question"))
+            detail_data.question = Question.objects.get(
+                id=OptionSerializer(detail_data.option).data.get("question"))
             detail_data.save()
 
         return Response(savaid)
@@ -102,6 +105,8 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def detailed(self, request):
+        
+        print(UserSerializer(request.user).data)
         recordqueryset = EvaluationRecord.objects.all()
         recorddata = EvaluationRecordSerializer(recordqueryset, many=True).data
         evaqueryset = Evaluation.objects.all()
