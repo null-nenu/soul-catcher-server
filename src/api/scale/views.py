@@ -22,7 +22,6 @@ from .serializers import EvaluationDetailSerializer
 from datetime import datetime
 
 
-
 # Create your views here.
 class EvaluationViewSet(viewsets.ModelViewSet):
     queryset = Evaluation.objects.all()
@@ -97,6 +96,20 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
     def details(self, request, pk=None):
         evaratequeryset = EvaluationRate.objects.get(id='1')
         return Response(EvaluationRateSerializer(evaratequeryset, many=False).data)
+
+    @action(methods=['get'], detail=False)
+    def details(self, request, pk=None):
+        recordqueryset = EvaluationRecord.objects.all()
+        recorddata = EvaluationRecordSerializer(recordqueryset, many=True).data
+        evaqueryset = Evaluation.objects.all()
+        evadata = EvaluationSerializer(evaqueryset, many=True).data
+        for temprecord in recorddata:
+            for tempeeva in evadata:
+                temprecord['timestamp'] = temprecord['timestamp'].replace('T', ' ').split('.', 1)[0]
+                if temprecord['evaluation'] == tempeeva['id']:
+                    temprecord['evaluation_name'] = tempeeva['name']
+                    temprecord['evaluation_detail'] = tempeeva['detail']
+        return Response(recorddata)
 
 
 class EvaluationDetailViewSet(viewsets.ModelViewSet):
