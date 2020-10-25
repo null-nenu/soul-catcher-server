@@ -31,18 +31,7 @@ class EvaluationViewSet(viewsets.ModelViewSet):
     def details(self, request, pk=None):
         if pk == None:
             return Response(status=404)
-        evaqueryset = Evaluation.objects.get(id=pk)
-        evaluation = EvaluationSerializer(evaqueryset, many=False)
-        quesqueryset = Question.objects.filter(evaluation_id=pk)
-        question = QuestionSerializer(quesqueryset, many=True)
-        questiondata = question.data
-        for temp in questiondata:
-            optionqueryset = Option.objects.filter(question_id=temp['id'])
-            option = OptionSerializer(optionqueryset, many=True)
-            temp['options'] = option.data
-        res = dict(evaluation.data)
-        res['questions'] = questiondata
-        return Response(res)
+        return Response(evaluationdetails(pk))
 
     @action(methods=['post'], detail=False)
     def score(self, request, pk=None):
@@ -115,3 +104,42 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
 class EvaluationDetailViewSet(viewsets.ModelViewSet):
     queryset = EvaluationDetail.objects.all()
     serializer_class = EvaluationDetailSerializer
+
+    @action(methods=['get'], detail=True)
+    def details(self, request, pk=None):
+        if pk == None:
+            return Response(status=404)
+        recordqueryset = EvaluationRecord.objects.get(id=pk)
+        evaid = EvaluationRecordSerializer(recordqueryset, many=False).data['evaluation']
+        evadetailqueryset = EvaluationDetail.objects.filter(evaluation_id=pk)
+        evadetaildata = EvaluationDetailSerializer(evadetailqueryset, many=True).data
+        selectedoptionid = [o['option'] for o in evadetaildata]
+        evadata = evaluationdetails(evaid)
+        for tempquestion in evadata['questions']:
+            for tempoption in tempquestion['options']:
+                if tempoption['id'] in selectedoptionid:
+                    tempoption['selected'] = True
+                    break
+                else:
+                    tempoption['selected'] = False
+        return Response(evadata)
+
+
+'''
+通过量表Id查询问题和选项
+'''
+
+
+def evaluationdetails(pk):
+    evaqueryset = Evaluation.objects.get(id=pk)
+    evaluation = EvaluationSerializer(evaqueryset, many=False)
+    quesqueryset = Question.objects.filter(evaluation_id=pk)
+    question = QuestionSerializer(quesqueryset, many=True)
+    questiondata = question.data
+    for temp in questiondata:
+        optionqueryset = Option.objects.filter(question_id=temp['id'])
+        option = OptionSerializer(optionqueryset, many=True)
+        temp['options'] = option.data
+    res = dict(evaluation.data)
+    res['questions'] = questiondata
+    return res
