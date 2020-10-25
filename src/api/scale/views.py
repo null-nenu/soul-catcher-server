@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -18,6 +19,9 @@ from .serializers import OptionSerializer
 from .serializers import EvaluationRecordSerializer
 from .serializers import EvaluationDetailSerializer
 
+from datetime import datetime
+
+
 
 # Create your views here.
 class EvaluationViewSet(viewsets.ModelViewSet):
@@ -34,26 +38,40 @@ class EvaluationViewSet(viewsets.ModelViewSet):
         question = QuestionSerializer(quesqueryset, many=True)
         questiondata = question.data
         for temp in questiondata:
-            optionQuerySet = Option.objects.filter(question_id=temp['id'])
-            option = OptionSerializer(optionQuerySet, many=True)
+            optionqueryset = Option.objects.filter(question_id=temp['id'])
+            option = OptionSerializer(optionqueryset, many=True)
             temp['options'] = option.data
         res = dict(evaluation.data)
         res['questions'] = questiondata
         return Response(res)
 
-    @action(methods=['post'], detail=True)
+    @action(methods=['post'], detail=False)
     def score(self, request, pk=None):
-        request_data = request.data
-        scoreSum = 0
-        optionQuerySet = Option.objects.filter(pk__in=request_data['options'])
-        optiondata = OptionSerializer(optionQuerySet, many=True).data
+        requestdata = request.data
+        scoresum = 0
+        optionqueryset = Option.objects.filter(pk__in=requestdata['options'])
+        optiondata = OptionSerializer(optionqueryset, many=True).data
         for temp in optiondata:
-            scoreSum = scoreSum + temp['score']
+            scoresum += temp['score']
+        # user 临时为none
+        user = None
+        ftime = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[0:-3]
+        evaluationrecord = EvaluationRecord(user=user, score=scoresum, timestamp=ftime)
+        evaluationrecord.evaluation = Evaluation.objects.get(id=requestdata['evaluation'])
+        evaluationrecord.save()
+        recqueryset = EvaluationRecord.objects.filter(user=user, evaluation=requestdata['evaluation'], timestamp=ftime)
+        rec_id = EvaluationRecordSerializer(recqueryset, many=True).data[0]['id']
+        savaid = {'id': rec_id}
 
-        evaluationRecord = EvaluationRecord(user=None, evaluation=request_data['evaluation'], score=scoreSum)
-        evaluationRecord.save()
+        data = zip(requestdata['question'], requestdata['options'])
+        for i, j in data:
+            detail_data = EvaluationDetail()
+            detail_data.option = Option.objects.get(id=j)
+            detail_data.evaluation = evaluationrecord
+            detail_data.question = Question.objects.get(id=i)
+            detail_data.save()
 
-        return Response(optiondata)
+        return Response(savaid)
 
 
 class EvaluationRateViewSet(viewsets.ModelViewSet):
@@ -74,6 +92,11 @@ class OptionViewSet(viewsets.ModelViewSet):
 class EvaluationRecordViewSet(viewsets.ModelViewSet):
     queryset = EvaluationRecord.objects.all()
     serializer_class = EvaluationRecordSerializer
+
+    @action(methods=['get'], detail=True)
+    def details(self, request, pk=None):
+        evaratequeryset = EvaluationRate.objects.get(id='1')
+        return Response(EvaluationRateSerializer(evaratequeryset, many=False).data)
 
 
 class EvaluationDetailViewSet(viewsets.ModelViewSet):
