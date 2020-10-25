@@ -55,19 +55,22 @@ class EvaluationViewSet(viewsets.ModelViewSet):
         # user 临时为none
         user = None
         ftime = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[0:-3]
-        evaluationrecord = EvaluationRecord(user=user, score=scoresum, timestamp=ftime)
-        evaluationrecord.evaluation = Evaluation.objects.get(id=requestdata['evaluation'])
+        evaluationrecord = EvaluationRecord(
+            user=user, score=scoresum, timestamp=ftime)
+        evaluationrecord.evaluation = Evaluation.objects.get(
+            id=requestdata['evaluation'])
         evaluationrecord.save()
-        recqueryset = EvaluationRecord.objects.filter(user=user, evaluation=requestdata['evaluation'], timestamp=ftime)
-        rec_id = EvaluationRecordSerializer(recqueryset, many=True).data[0]['id']
+        recqueryset = EvaluationRecord.objects.filter(
+            user=user, evaluation=requestdata['evaluation'], timestamp=ftime)
+        rec_id = EvaluationRecordSerializer(
+            recqueryset, many=True).data[0]['id']
         savaid = {'id': rec_id}
 
-        data = zip(requestdata['question'], requestdata['options'])
-        for i, j in data:
+        for j in requestdata['options']:
             detail_data = EvaluationDetail()
             detail_data.option = Option.objects.get(id=j)
             detail_data.evaluation = evaluationrecord
-            detail_data.question = Question.objects.get(id=i)
+            detail_data.question = Question.objects.get(id=OptionSerializer(detail_data.option).data.get("question"))
             detail_data.save()
 
         return Response(savaid)
@@ -98,14 +101,15 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
         return Response(EvaluationRateSerializer(evaratequeryset, many=False).data)
 
     @action(methods=['get'], detail=False)
-    def details(self, request, pk=None):
+    def detailed(self, request):
         recordqueryset = EvaluationRecord.objects.all()
         recorddata = EvaluationRecordSerializer(recordqueryset, many=True).data
         evaqueryset = Evaluation.objects.all()
         evadata = EvaluationSerializer(evaqueryset, many=True).data
         for temprecord in recorddata:
             for tempeeva in evadata:
-                temprecord['timestamp'] = temprecord['timestamp'].replace('T', ' ').split('.', 1)[0]
+                temprecord['timestamp'] = temprecord['timestamp'].replace(
+                    'T', ' ').split('.', 1)[0]
                 if temprecord['evaluation'] == tempeeva['id']:
                     temprecord['evaluation_name'] = tempeeva['name']
                     temprecord['evaluation_detail'] = tempeeva['detail']
