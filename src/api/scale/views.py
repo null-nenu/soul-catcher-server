@@ -91,8 +91,20 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True)
     def details(self, request, pk=None):
-        evaratequeryset = EvaluationRate.objects.get(id='1')
-        return Response(EvaluationRateSerializer(evaratequeryset, many=False).data)
+        evaratequeryset = EvaluationRecord.objects.get(id='1')
+        data = {
+            "id": 1,
+            "timestamp": "2020-10-26 15:28:28",
+            "score": 3.0,
+            "deleted": 'false',
+            "user": 'null',
+            "evaluation": 1,
+            "level":"轻度抑郁",
+            "analysis":"分析你为轻度抑郁，你没救了，等死吧你",
+            "advice":"多吃菜少吃饭"
+        }
+        # return Response(EvaluationRecordSerializer(evaratequeryset, many=False).data)
+        return Response(data)
 
     @action(methods=['get'], detail=False)
     def detailed(self, request):
@@ -113,8 +125,8 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
     def overview(self, request):
         if request.auth is None:
             return Response({'msg': '未登录'}, status=404)
-        date = {'Test': 3, 'Trend': 'normal'}
-        return Response(date)
+        data = {'Test': 3, 'Trend': 'normal'}
+        return Response(data)
 
 
 class EvaluationDetailViewSet(viewsets.ModelViewSet):
@@ -138,8 +150,9 @@ class StoryViewSet(viewsets.ModelViewSet):
         level = 0
         for temp in ERset:
             pass
-        data = {'level': 1, 'title':'title1', 'url':'/static/storys/1.html', 'type':'type1' }
+        data = {'level': 1, 'title': 'title1', 'url': '/static/storys/1.html', 'type': 'type1'}
         return Response(data)
+
 
 def evaluationdetails(pk):
     evaqueryset = Evaluation.objects.get(id=pk)
