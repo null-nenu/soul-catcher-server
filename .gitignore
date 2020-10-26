@@ -9,3 +9,7 @@ mariadb
 src/settings.py
 
 static
+
+*/migrations/*
+
+*/.idea
