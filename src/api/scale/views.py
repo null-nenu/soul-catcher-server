@@ -140,25 +140,24 @@ class StoryViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def recommend(self, request):
-        id = request.data['id']
-        print(id)
-        # requestdata = request.data
-        # evaluationRecordId = requestdata['id']
-        # evaluationRecord = EvaluationRecord.objects.get(id=evaluationRecordId)
-        # score = evaluationRecord.score
-        # evaluation = evaluationRecord.evaluation
-        # evaluationRate = EvaluationRate.objects.filter(evaluation=evaluation)
-        # ERset = EvaluationRateSerializer(evaluationRate, many=True).data
-        # level = 0
-        #
-        # for temp in ERset:
-        #     if score <= temp['max'] and score >=temp['min']:
-        #         level = temp['level']
-        #         break
-        #     else:
-        #         continue
-        # print(level)
-        data = [{'level': 1, 'title':'title1', 'url':'/static/storys/1.html', 'type':'type1' }, {'level': 1, 'title':'title2', 'url':'/static/storys/2.html', 'type':'type2' }]
+        ID = request.data['id']
+        evaluationRecord = EvaluationRecord.objects.get(id=ID)
+        score = evaluationRecord.score
+        evaluation = evaluationRecord.evaluation
+        evaluationRate = EvaluationRate.objects.filter(evaluation=evaluation)
+        ERset = EvaluationRateSerializer(evaluationRate, many=True).data
+        level = 1
+        for temp in ERset:
+            if score <= temp['max'] and score >=temp['min']:
+                level = temp['level']
+                break
+            else:
+                continue
+        data = []
+        recommend_query = Story.objects.filter(level=level)
+        recommend_data = StorySerializer(recommend_query, many=True).data
+        for temp in recommend_data:
+            data.append(temp)
         return Response(data)
 
 
