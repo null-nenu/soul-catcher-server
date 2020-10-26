@@ -119,6 +119,6 @@ class StoryViewSet(viewsets.ModelViewSet):
         # evaluation = evaluationRecord.evaluation
         # evaluationRate = EvaluationRecord.objects.filter(evaluation=evaluation)
         # recqueryset = EvaluationRecordSerializer(evaluationRate, many=True).data
-        data = {'level': 1, 'title':'title1', 'url':'url1', 'type':'type1' }
+        data = {'level': 1, 'title':'title1', 'url':'/static/storys/1.html', 'type':'type1' }
         return Response(data)
 
