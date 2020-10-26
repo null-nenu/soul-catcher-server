@@ -116,9 +116,12 @@ class StoryViewSet(viewsets.ModelViewSet):
         evaluationRecordId = requestdata['id']
         evaluationRecord = EvaluationRecord.objects.get(id=evaluationRecordId)
         score = evaluationRecord.score
-        # evaluation = evaluationRecord.evaluation
-        # evaluationRate = EvaluationRecord.objects.filter(evaluation=evaluation)
-        # recqueryset = EvaluationRecordSerializer(evaluationRate, many=True).data
+        evaluation = evaluationRecord.evaluation
+        evaluationRate = EvaluationRate.objects.filter(evaluation=evaluation)
+        ERset = EvaluationRateSerializer(evaluationRate, many=True).data
+        level = 0
+        for temp in ERset:
+            pass
         data = {'level': 1, 'title':'title1', 'url':'/static/storys/1.html', 'type':'type1' }
         return Response(data)
 
