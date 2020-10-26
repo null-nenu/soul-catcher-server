@@ -140,7 +140,7 @@ class StoryViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def recommend(self, request):
-        ID = request.data['id']
+        ID = request.query_params.get('id')
         evaluationRecord = EvaluationRecord.objects.get(id=ID)
         score = evaluationRecord.score
         evaluation = evaluationRecord.evaluation
