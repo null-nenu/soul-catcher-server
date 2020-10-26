@@ -31,8 +31,10 @@ class EvaluationViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True)
     def details(self, request, pk=None):
-        if pk == None:
+        if pk is None:
             return Response(status=404)
+        elif request.auth is None:
+            return Response({'msg': '未登录'}, status=404)
         return Response(evaluationdetails(pk))
 
     @action(methods=['post'], detail=False)
@@ -94,8 +96,6 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def detailed(self, request):
-        
-        print(UserSerializer(request.user).data)
         recordqueryset = EvaluationRecord.objects.all()
         recorddata = EvaluationRecordSerializer(recordqueryset, many=True).data
         evaqueryset = Evaluation.objects.all()
@@ -109,6 +109,13 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
                     temprecord['evaluation_detail'] = tempeeva['detail']
         return Response(recorddata)
 
+    @action(methods=['get'], detail=False)
+    def overview(self, request):
+        if request.auth is None:
+            return Response({'msg': '未登录'}, status=404)
+        date = {'Test': 3, 'Trend': 'normal'}
+        return Response(date)
+
 
 class EvaluationDetailViewSet(viewsets.ModelViewSet):
     queryset = EvaluationDetail.objects.all()
@@ -116,7 +123,7 @@ class EvaluationDetailViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True)
     def details(self, request, pk=None):
-        if pk == None:
+        if pk is None:
             return Response(status=404)
         recordqueryset = EvaluationRecord.objects.get(id=pk)
         evaid = EvaluationRecordSerializer(recordqueryset, many=False).data['evaluation']
