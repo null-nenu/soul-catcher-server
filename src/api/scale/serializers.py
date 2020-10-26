@@ -31,3 +31,8 @@ class EvaluationDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = EvaluationDetail
         fields = "__all__"
+
+class StorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Story
+        fields = "__all__"
