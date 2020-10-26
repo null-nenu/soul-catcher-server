@@ -35,8 +35,6 @@ class EvaluationViewSet(viewsets.ModelViewSet):
     def details(self, request, pk=None):
         if pk is None:
             return Response(status=404)
-        elif request.auth is None:
-            return Response({'msg': '未登录'}, status=404)
         return Response(evaluationdetails(pk))
 
     @action(methods=['post'], detail=False)
