@@ -11,6 +11,7 @@ from .models import Question
 from .models import Option
 from .models import EvaluationRecord
 from .models import EvaluationDetail
+from .models import Story
 
 from .serializers import EvaluationSerializer
 from .serializers import EvaluationRateSerializer
@@ -18,6 +19,7 @@ from .serializers import QuestionSerializer
 from .serializers import OptionSerializer
 from .serializers import EvaluationRecordSerializer
 from .serializers import EvaluationDetailSerializer
+from .serializers import StorySerializer
 
 from datetime import datetime
 
@@ -102,3 +104,21 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
 class EvaluationDetailViewSet(viewsets.ModelViewSet):
     queryset = EvaluationDetail.objects.all()
     serializer_class = EvaluationDetailSerializer
+
+
+class StoryViewSet(viewsets.ModelViewSet):
+    queryset = Story.objects.all()
+    serializer_class = StorySerializer
+
+    @action(methods=['post'], detail=False)
+    def recommend(self, request, pk=None):
+        requestdata = request.data
+        evaluationRecordId = requestdata['id']
+        evaluationRecord = EvaluationRecord.objects.get(id=evaluationRecordId)
+        score = evaluationRecord.score
+        # evaluation = evaluationRecord.evaluation
+        # evaluationRate = EvaluationRecord.objects.filter(evaluation=evaluation)
+        # recqueryset = EvaluationRecordSerializer(evaluationRate, many=True).data
+        data = {'level': 1, 'title':'title1', 'url':'url1', 'type':'type1' }
+        return Response(data)
+

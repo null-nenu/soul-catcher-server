@@ -28,6 +28,7 @@ router.register(r'question', evaluation_view.QuestionViewSet)
 router.register(r'option', evaluation_view.OptionViewSet)
 router.register(r'evaluation_record', evaluation_view.EvaluationRecordViewSet)
 router.register(r'evaluation_detail', evaluation_view.EvaluationDetailViewSet)
+router.register(r'story', evaluation_view.StoryViewSet)
 
 
 urlpatterns = [

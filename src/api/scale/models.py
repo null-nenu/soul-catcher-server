@@ -17,9 +17,9 @@ class EvaluationRate(models.Model):
         Evaluation, on_delete=models.SET_NULL, null=True)
     min = models.FloatField(null=True)
     max = models.FloatField(null=True)
-    level = models.CharField(max_length=255)
+    level = models.IntegerField(null=True)
     content = models.TextField(null=True)
-    warning = models.BooleanField(default=False)
+    advice = models.TextField(null=True)
     deleted = models.BooleanField(default=False)
 
 
@@ -53,3 +53,11 @@ class EvaluationDetail(models.Model):
     question = models.ForeignKey(
         Question, on_delete=models.SET_NULL, null=True)
     option = models.ForeignKey(Option, on_delete=models.SET_NULL, null=True)
+
+
+class Story(models.Model):
+    level = models.IntegerField(null=True)
+    title = models.TextField(null=True)
+    markdown = models.TextField(null=True)
+    url = models.URLField(null=True)
+    type = models.CharField(null=True, max_length=255)
