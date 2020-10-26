@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -86,7 +87,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 'django.db.backends.sqlite3',
         'NAME': 'soul',  # BASE_DIR / 'db.sqlite3',
-        'HOST': '39.107.61.225',
+        'HOST': '39.107.61.225',  # mariadb
         'PORT': '3306',
         'USER': 'root',
         'PASSWORD': '1214',
@@ -119,16 +120,27 @@ AUTH_PASSWORD_VALIDATORS = [
 # test
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/api/static/'
+
+MEDIA_ROOT = '/var/static/'
+MEDIA_URL = '/static/'
+
+# auth
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ]
+}

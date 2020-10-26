@@ -18,6 +18,7 @@ from django.urls import path, include
 from rest_framework import routers
 from src.api.wechat import views as wechat_view
 from src.api.scale import views as evaluation_view
+from src.api.setting import views as setting_view
 
 # router of Django REST Framework
 router = routers.DefaultRouter()
@@ -29,10 +30,13 @@ router.register(r'option', evaluation_view.OptionViewSet)
 router.register(r'evaluation_record', evaluation_view.EvaluationRecordViewSet)
 router.register(r'evaluation_detail', evaluation_view.EvaluationDetailViewSet)
 router.register(r'story', evaluation_view.StoryViewSet)
-
+router.register(r'setting', setting_view.SettingViewSet, basename="setting")
+router.register(r'background_music', setting_view.BackgroundMusicViewSet)
+router.register(r'background_image', setting_view.BackgroundImageViewSet)
+router.register(r'solgan', setting_view.SloganViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),     # add Django REST Framework's URL to Django
+    # add Django REST Framework's URL to Django
+    path('', include(router.urls)),
     path('admin/', admin.site.urls),
 ]
-
