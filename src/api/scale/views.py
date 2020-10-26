@@ -97,9 +97,9 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
             "deleted": 'false',
             "user": 'null',
             "evaluation": 1,
-            "level":"轻度抑郁",
-            "analysis":"分析你为轻度抑郁，你没救了，等死吧你",
-            "advice":"多吃菜少吃饭"
+            "level": "轻度抑郁",
+            "analysis": "分析你为轻度抑郁，你没救了，等死吧你",
+            "advice": "多吃菜少吃饭"
         }
         # return Response(EvaluationRecordSerializer(evaratequeryset, many=False).data)
         return Response(data)
@@ -146,7 +146,7 @@ class StoryViewSet(viewsets.ModelViewSet):
         ERset = EvaluationRateSerializer(evaluationRate, many=True).data
         level = 1
         for temp in ERset:
-            if score <= temp['max'] and score >=temp['min']:
+            if score <= temp['max'] and score >= temp['min']:
                 level = temp['level']
                 break
             else:
