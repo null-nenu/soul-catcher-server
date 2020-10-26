@@ -12,6 +12,7 @@ from .models import Question
 from .models import Option
 from .models import EvaluationRecord
 from .models import EvaluationDetail
+from .models import Story
 
 from .serializers import EvaluationSerializer
 from .serializers import EvaluationRateSerializer
@@ -20,6 +21,7 @@ from .serializers import OptionSerializer
 from .serializers import EvaluationRecordSerializer
 from .serializers import EvaluationDetailSerializer
 from src.api.user.serializers import UserSerializer
+from .serializers import StorySerializer
 
 from datetime import datetime
 
@@ -121,7 +123,6 @@ class EvaluationDetailViewSet(viewsets.ModelViewSet):
     queryset = EvaluationDetail.objects.all()
     serializer_class = EvaluationDetailSerializer
 
-<<<<<<< HEAD
 
 class StoryViewSet(viewsets.ModelViewSet):
     queryset = Story.objects.all()
@@ -142,32 +143,6 @@ class StoryViewSet(viewsets.ModelViewSet):
         data = {'level': 1, 'title':'title1', 'url':'/static/storys/1.html', 'type':'type1' }
         return Response(data)
 
-=======
-    @action(methods=['get'], detail=True)
-    def details(self, request, pk=None):
-        if pk is None:
-            return Response(status=404)
-        recordqueryset = EvaluationRecord.objects.get(id=pk)
-        evaid = EvaluationRecordSerializer(recordqueryset, many=False).data['evaluation']
-        evadetailqueryset = EvaluationDetail.objects.filter(evaluation_id=pk)
-        evadetaildata = EvaluationDetailSerializer(evadetailqueryset, many=True).data
-        selectedoptionid = [o['option'] for o in evadetaildata]
-        evadata = evaluationdetails(evaid)
-        for tempquestion in evadata['questions']:
-            for tempoption in tempquestion['options']:
-                if tempoption['id'] in selectedoptionid:
-                    tempoption['selected'] = True
-                    break
-                else:
-                    tempoption['selected'] = False
-        return Response(evadata)
-
-
-'''
-通过量表Id查询问题和选项
-'''
-
-
 def evaluationdetails(pk):
     evaqueryset = Evaluation.objects.get(id=pk)
     evaluation = EvaluationSerializer(evaqueryset, many=False)
@@ -181,4 +156,3 @@ def evaluationdetails(pk):
     res = dict(evaluation.data)
     res['questions'] = questiondata
     return res
->>>>>>> 625a0e731c5e63f1c3c34be7ac5330bea6b0e5a2
