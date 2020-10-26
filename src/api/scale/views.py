@@ -138,19 +138,27 @@ class StoryViewSet(viewsets.ModelViewSet):
     queryset = Story.objects.all()
     serializer_class = StorySerializer
 
-    @action(methods=['post'], detail=False)
-    def recommend(self, request, pk=None):
-        requestdata = request.data
-        evaluationRecordId = requestdata['id']
-        evaluationRecord = EvaluationRecord.objects.get(id=evaluationRecordId)
-        score = evaluationRecord.score
-        evaluation = evaluationRecord.evaluation
-        evaluationRate = EvaluationRate.objects.filter(evaluation=evaluation)
-        ERset = EvaluationRateSerializer(evaluationRate, many=True).data
-        level = 0
-        for temp in ERset:
-            pass
-        data = {'level': 1, 'title': 'title1', 'url': '/static/storys/1.html', 'type': 'type1'}
+    @action(methods=['get'], detail=False)
+    def recommend(self, request):
+        id = request.data['id']
+        print(id)
+        # requestdata = request.data
+        # evaluationRecordId = requestdata['id']
+        # evaluationRecord = EvaluationRecord.objects.get(id=evaluationRecordId)
+        # score = evaluationRecord.score
+        # evaluation = evaluationRecord.evaluation
+        # evaluationRate = EvaluationRate.objects.filter(evaluation=evaluation)
+        # ERset = EvaluationRateSerializer(evaluationRate, many=True).data
+        # level = 0
+        #
+        # for temp in ERset:
+        #     if score <= temp['max'] and score >=temp['min']:
+        #         level = temp['level']
+        #         break
+        #     else:
+        #         continue
+        # print(level)
+        data = [{'level': 1, 'title':'title1', 'url':'/static/storys/1.html', 'type':'type1' }, {'level': 1, 'title':'title2', 'url':'/static/storys/2.html', 'type':'type2' }]
         return Response(data)
 
 
