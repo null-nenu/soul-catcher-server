@@ -33,8 +33,6 @@ class EvaluationViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True)
     def details(self, request, pk=None):
-        if pk is None:
-            return Response(status=404)
         return Response(evaluationdetails(pk))
 
     @action(methods=['post'], detail=False)
