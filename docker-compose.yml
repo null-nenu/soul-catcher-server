@@ -15,7 +15,7 @@ services:
         volumes:
             - ./mariadb:/var/lib/mysql
         ports:
-            - "33060:3306"
+            - "3306:3306"
     django:
         build: .
         command: bash -c "python3 manage.py makemigrations scale setting story user wechat && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
@@ -37,6 +37,5 @@ services:
         depends_on: 
             - django
         ports: 
-            - "4430:443"
             - "8080:80"
     
