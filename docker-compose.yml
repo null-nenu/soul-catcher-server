@@ -37,5 +37,6 @@ services:
         depends_on: 
             - django
         ports: 
-            - "443:443"
+            - "4430:443"
+            - "8080:80"
     
