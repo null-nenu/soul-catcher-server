@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.base import Model
 
+
 # Create your models here.
 
 
@@ -21,6 +22,7 @@ class EvaluationRate(models.Model):
     content = models.TextField(null=True)
     advice = models.TextField(null=True)
     deleted = models.BooleanField(default=False)
+    level_text = models.CharField(max_length=255, null=True)
 
 
 class Question(models.Model):
@@ -39,7 +41,7 @@ class Option(models.Model):
 
 
 class EvaluationRecord(models.Model):
-    user = models.ForeignKey(User,  on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     evaluation = models.ForeignKey(
         Evaluation, on_delete=models.SET_NULL, null=True)
     score = models.FloatField(null=True)
