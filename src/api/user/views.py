@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
 from ..scale.models import EvaluationRecord
+from ..scale.views import EvaluationRecordSerializer
 
 
 # Create your views here.
@@ -14,6 +15,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=False)
     def destory(self, request):
-        user = User.objects.get(username=request.user)
-        EvaluationRecord.objects.filter(user=user).update(user=None)
+        userqueryset = User.objects.get(username=request.user)
+        user=UserSerializer(userqueryset).data
+        EvaluationRecord.objects.filter(user_id=user['id']).update(user=None)
         return Response(status=200)
+
