@@ -37,8 +37,6 @@ class EvaluationViewSet(viewsets.ModelViewSet):
     def score(self, request, pk=None):
         begin = datetime.now()
         requestdata = request.data
-        if request.auth is None:
-            return Response({'msg': '未登录'}, status=404)
         scoresum = 0
         optionqueryset = Option.objects.filter(pk__in=requestdata['options'])
         optiondata = OptionSerializer(optionqueryset, many=True).data
