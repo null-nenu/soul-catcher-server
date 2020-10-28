@@ -61,3 +61,4 @@ class Story(models.Model):
     markdown = models.TextField(null=True)
     url = models.URLField(null=True)
     type = models.CharField(null=True, max_length=255)
+    html = models.TextField(null=True)
