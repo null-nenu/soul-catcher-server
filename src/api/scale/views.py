@@ -42,7 +42,9 @@ class EvaluationViewSet(viewsets.ModelViewSet):
         optiondata = OptionSerializer(optionqueryset, many=True).data
         for temp in optiondata:
             scoresum += temp['score']
-        user = User.objects.get(username=request.user)
+        user=None
+        if request.auth is not None:
+            user = User.objects.get(username=request.user)
         ftime = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[0:-3]
         evaluationrecord = EvaluationRecord(
             user=user, score=scoresum, timestamp=ftime)
