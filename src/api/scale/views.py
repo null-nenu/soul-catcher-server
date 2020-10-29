@@ -128,10 +128,12 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
         recordqueryset = EvaluationRecord.objects.filter(user=user['id'])
         recorddata = EvaluationRecordSerializer(recordqueryset, many=True).data
         count = len(recorddata)
-        ratequeryset = EvaluationRate.objects.filter(evaluation_id=recorddata[-1]['evaluation'],
-                                                     min__lte=recorddata[-1]['score'],
-                                                     max__gte=recorddata[-1]['score'])
-        trend = EvaluationRateSerializer(ratequeryset, many=True).data[0]['level_text']
+        trend=''
+        if count > 0 :
+            ratequeryset = EvaluationRate.objects.filter(evaluation_id=recorddata[-1]['evaluation'],
+                                                         min__lte=recorddata[-1]['score'],
+                                                         max__gte=recorddata[-1]['score'])
+            trend = EvaluationRateSerializer(ratequeryset, many=True).data[0]['level_text']
         return Response({'Test': count, 'Trend': trend})
 
 
