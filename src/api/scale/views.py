@@ -118,6 +118,7 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
                     temprecord['evaluation_name'] = tempeeva['name']
                     temprecord['evaluation_detail'] = tempeeva['detail']
         return Response(recorddata)
+    
     #总测试次数和趋势
     @action(methods=['get'], detail=False)
     def overview(self, request):
