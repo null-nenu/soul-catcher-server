@@ -12,7 +12,7 @@ from ..scale.views import EvaluationRecordSerializer
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
+    #删除评测历史
     @action(methods=['post'], detail=False)
     def destory(self, request):
         userqueryset = User.objects.get(username=request.user)
