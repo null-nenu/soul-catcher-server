@@ -2,7 +2,7 @@
 
 ## 安装docker
 
-本例系统使用Ubuntu 20.04,安装Docker.
+本例系统使用Ubuntu 20.04,安装Docker。
 
 ```bash
 # 移除老版本的Docker相关组件
