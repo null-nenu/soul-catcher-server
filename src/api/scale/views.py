@@ -24,7 +24,6 @@ from .serializers import StorySerializer
 from datetime import datetime
 
 
-# Create your views here.
 class EvaluationViewSet(viewsets.ModelViewSet):
     queryset = Evaluation.objects.all()
     serializer_class = EvaluationSerializer
