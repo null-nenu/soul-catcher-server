@@ -182,3 +182,4 @@ def evaluationdetails(pk):
     res = dict(evaluation.data)
     res['questions'] = questiondata
     return res
+
