@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 import datetime
+import time
 
 from .models import Evaluation
 from .models import EvaluationRate
@@ -22,7 +23,8 @@ from src.api.user.serializers import UserSerializer
 from .serializers import StorySerializer
 
 from datetime import datetime
-
+from .textToPng import textTopng
+import uuid
 
 class EvaluationViewSet(viewsets.ModelViewSet):
     queryset = Evaluation.objects.all()
@@ -31,6 +33,7 @@ class EvaluationViewSet(viewsets.ModelViewSet):
     @action(methods=['get'], detail=True)
     def details(self, request, pk=None):
         return Response(evaluationdetails(pk))
+
 
     @action(methods=['post'], detail=False)
     def score(self, request, pk=None):
@@ -86,6 +89,54 @@ class OptionViewSet(viewsets.ModelViewSet):
 class EvaluationRecordViewSet(viewsets.ModelViewSet):
     queryset = EvaluationRecord.objects.all()
     serializer_class = EvaluationRecordSerializer
+
+    @action(methods=['get'], detail=False)
+    def getdetail(self, request):
+        ID = request.query_params.get('id')
+        evaratequeryset = EvaluationRecord.objects.get(id=ID)
+        recorddata = EvaluationRecordSerializer(evaratequeryset, many=False).data
+        score = recorddata['score']
+        evaluationId = recorddata['evaluation']
+        evaluationData = Evaluation.objects.get(id=evaluationId)
+        # 表详情
+        evaluationTitle = evaluationData.name
+        info = evaluationData.detail
+        warning = evaluationData.warning
+        optionData = evaluationdetails(evaluationId)
+        questions = optionData['questions']
+        # 选项ID
+        detailset = EvaluationDetail.objects.filter(evaluation=ID)
+        detail = EvaluationDetailSerializer(detailset, many=True)
+        detaildata = detail.data
+        optionID = []
+        for temp in detaildata:
+            optionID.append(temp['option'])
+
+        pngHeight = len(optionID) * 2 +4
+        questions = zip(questions, optionID)
+        text = ""
+        text += evaluationTitle +"\n\n"
+        text += info + "\n\n"
+        text += warning + "\n\n"
+        i = 1
+        for item,op in questions:
+            text = text + "(" + str(i) + ")、"+ item['content'] + "\n"
+            for option in item['options']:
+                if option['id'] == op:
+                    text = text + "√" + option['content'] + "\n"
+                else:
+                    text = text + "  " + option['content'] + "\n"
+            text = text + "\n"
+            i = i + 1
+        text += "\n\n本次评测得分为：" + str(score)
+        print(text)
+        t = time.time()
+        result = str(uuid.uuid1()) + ".png"
+        n = textTopng(text, 8, pngHeight, result)
+        n.draw_text()
+        # 未修改
+        url = "/var/static/data/record/" + result
+        return Response({"url":url})
 
     @action(methods=['get'], detail=True)
     def details(self, request, pk=None):
@@ -146,6 +197,7 @@ class StoryViewSet(viewsets.ModelViewSet):
     queryset = Story.objects.all()
     serializer_class = StorySerializer
 
+    # 获取测评结果
     @action(methods=['get'], detail=False)
     def recommend(self, request):
         ID = request.query_params.get('id')
