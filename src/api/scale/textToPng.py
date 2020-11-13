@@ -7,7 +7,7 @@ class textTopng:
     self.pngWidth = pngWidth
     self.pngHeight = pngHeight
     self.result = result
-    # 预设宽度 可以修改成你需要的图片宽度
+    # 预设宽度 可以修改成你需要的图片宽度 1500最优
     self.width = 1500
     # 文本
     self.text = text
