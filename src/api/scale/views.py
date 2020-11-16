@@ -25,7 +25,6 @@ from .serializers import StorySerializer
 from datetime import datetime
 from .textToPng import textTopng
 import uuid
-from django.db.models import Q
 
 class EvaluationViewSet(viewsets.ModelViewSet):
     queryset = Evaluation.objects.all()
@@ -221,14 +220,14 @@ class StoryViewSet(viewsets.ModelViewSet):
             data.append(temp)
         return Response(data)
 
-    # 获取散散心
-    @action(methods=['get'], detail=False)
-    def getstory(self, request):
+    def list(self, request):
+        queryset = Story.objects.all()
+        serializer = StorySerializer(queryset, many=True)
+        serializer_data = serializer.data
         data = []
-        story_query = Story.objects.filter(Q(level = 1) | Q(level = 2) | Q(level = 3))
-        story_data = StorySerializer(story_query, many=True).data
-        for temp in story_data:
-            data.append(temp)
+        for item in serializer_data:
+            if item['level'] < 4:
+                data.append(item)
         return Response(data)
 
 
