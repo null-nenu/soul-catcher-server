@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.base import Model
+import uuid
+import os
 
 
 # Create your models here.

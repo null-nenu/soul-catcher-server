@@ -131,11 +131,11 @@ class EvaluationRecordViewSet(viewsets.ModelViewSet):
         text += "\n\n本次评测得分为：" + str(score)
         print(text)
         t = time.time()
-        result = str(uuid.uuid1()) + ".png"
-        n = textTopng(text, 8, pngHeight, result)
+        filename = str(uuid.uuid1()) + ".png"
+        n = textTopng(text, 20, pngHeight, "/var/static/record/" + filename)
         n.draw_text()
         # 未修改
-        url = "/var/static/data/record/" + result
+        url = "/static/record/" +  filename
         return Response({"url":url})
 
     @action(methods=['get'], detail=True)

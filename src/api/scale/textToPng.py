@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 class textTopng:
   font = ImageFont.truetype("src/api/font/MSYH.TTF", 40)
-  def __init__(self, text,pngWidth = 8, pngHeight = 20, result = "result.png"):
+  def __init__(self, text,pngWidth = 12, pngHeight = 20, result = "result.png"):
     self.pngWidth = pngWidth
     self.pngHeight = pngHeight
     self.result = result
@@ -58,7 +58,7 @@ class textTopng:
     :return:
     """
     fig = plt.gcf()
-    name = r"src/api/data/" + self.result
+    name = self.result
     fig.set_size_inches(self.pngWidth, self.pngHeight)
     fig.savefig(name, dpi=180)
 
