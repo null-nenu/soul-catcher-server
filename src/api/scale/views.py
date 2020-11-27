@@ -25,6 +25,7 @@ from .serializers import StorySerializer
 from datetime import datetime
 from .textToPng import textTopng
 import uuid
+import random
 
 class EvaluationViewSet(viewsets.ModelViewSet):
     queryset = Evaluation.objects.all()
@@ -213,11 +214,18 @@ class StoryViewSet(viewsets.ModelViewSet):
                 break
             else:
                 continue
+        # 按level筛选
         data = []
         recommend_query = Story.objects.filter(level=level)
         recommend_data = StorySerializer(recommend_query, many=True).data
-        for temp in recommend_data:
-            data.append(temp)
+        # 随机选择 select_num个 推荐内容
+        recommend_len = len(recommend_data)
+        select_num = 2
+        if recommend_len < 2:
+            select_num = recommend_len
+        random_list = random.sample(range(recommend_len),select_num);
+        for temp in random_list:
+            data.append(recommend_data[temp])
         return Response(data)
 
     def list(self, request):
