@@ -38,3 +38,6 @@ class BackgroundImageViewSet(viewsets.ModelViewSet):
 class SloganViewSet(viewsets.ModelViewSet):
     queryset = Slogan.objects.all()
     serializer_class = SloganSerializer
+
+    
+    
